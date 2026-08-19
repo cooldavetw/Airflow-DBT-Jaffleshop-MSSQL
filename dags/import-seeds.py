@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.datasets import Dataset
+from airflow.hooks.base import BaseHook
 from airflow.utils.task_group import TaskGroup
 from pendulum import datetime
 import os
@@ -17,14 +18,25 @@ DBT_SCHEMA = os.environ.get("DBT_SCHEMA", "dbo")
 DBT_DRIVER = os.environ.get("DBT_DRIVER", "ODBC Driver 18 for SQL Server")
 DBT_TRUST_CERT = os.environ.get("DBT_TRUST_CERT", "true").lower() == "true"
 
+
+def get_dbt_database():
+    if DBT_DATABASE:
+        return DBT_DATABASE
+
+    try:
+        return BaseHook.get_connection(DBT_CONN_ID).schema
+    except Exception:
+        return None
+
 profile_args = {
     "schema": DBT_SCHEMA,
     "driver": DBT_DRIVER,
     "trust_cert": DBT_TRUST_CERT,
 }
 
-if DBT_DATABASE:
-    profile_args["database"] = DBT_DATABASE
+dbt_database = get_dbt_database()
+if dbt_database:
+    profile_args["database"] = dbt_database
 
 profile_config = ProfileConfig(
     profile_name="jaffle_shop",
