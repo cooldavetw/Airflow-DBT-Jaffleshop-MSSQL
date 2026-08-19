@@ -13,6 +13,7 @@ DBT_CONN_ID = os.environ.get("DBT_CONN_ID", "mssql")
 DBT_DATABASE = os.environ.get("DBT_DATABASE", "jaffle_shop")
 DBT_SCHEMA = os.environ.get("DBT_SCHEMA", "dbo")
 DBT_DRIVER = os.environ.get("DBT_DRIVER", "ODBC Driver 18 for SQL Server")
+DBT_TRUST_CERT = os.environ.get("DBT_TRUST_CERT", "true").lower() == "true"
 
 profile_config = ProfileConfig(
     profile_name="jaffle_shop",
@@ -23,6 +24,7 @@ profile_config = ProfileConfig(
             "database": DBT_DATABASE,
             "schema": DBT_SCHEMA,
             "driver": DBT_DRIVER,
+            "trust_cert": DBT_TRUST_CERT,
         },
     ),
 )
