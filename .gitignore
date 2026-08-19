@@ -1,0 +1,9 @@
+.git
+.env
+airflow_settings.yaml
+pod-config.yml
+logs/
+airflow-webserver.pid
+webserver_config.py
+airflow.cfg
+**/__pycache__/
